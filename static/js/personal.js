@@ -59,27 +59,7 @@ window.addEventListener('scroll', () => {
 // ===========================
 // ENQUIRY FORM HANDLING
 // ===========================
-const enquiryForm = document.getElementById('enquiryForm');
 
-enquiryForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // Get form data
-    const formData = {
-        email: document.getElementById('email').value,
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value
-    };
-
-    // TODO: Implement email sending functionality
-    console.log('Form submitted:', formData);
-
-    // Show success message (temporary)
-    alert('Thank you for your enquiry! This feature will be implemented soon.');
-
-    // Reset form
-    enquiryForm.reset();
-});
 
 // ===========================
 // SCROLL ANIMATIONS (INTERSECTION OBSERVER)
