@@ -39,7 +39,7 @@ const navLinksAll = document.querySelectorAll('.nav-links a');
 
 window.addEventListener('scroll', () => {
     let current = '';
-
+    
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
@@ -59,7 +59,56 @@ window.addEventListener('scroll', () => {
 // ===========================
 // ENQUIRY FORM HANDLING
 // ===========================
+const enquiryForm = document.getElementById('enquiryForm');
 
+enquiryForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = {
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+    };
+    
+    // Disable submit button to prevent multiple submissions
+    const submitBtn = enquiryForm.querySelector('.btn-submit');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>';
+    
+    try {
+        // Send data to Flask backend
+        const response = await fetch('/enquiry/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            // Show success message
+            alert('✅ ' + result.message);
+            
+            // Reset form
+            enquiryForm.reset();
+        } else {
+            // Show error message
+            alert('❌ Error: ' + result.message);
+        }
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('❌ Failed to send enquiry. Please try again later.');
+    } finally {
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+    }
+});
 
 // ===========================
 // SCROLL ANIMATIONS (INTERSECTION OBSERVER)
@@ -78,8 +127,8 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Apply animation to cards and form
-document.querySelectorAll('.education-card, .achievement-card, .project-card, .skill-category, .enquiry-form').forEach(el => {
+// Apply animation to cards, form, and message cards
+document.querySelectorAll('.education-card, .achievement-card, .project-card, .skill-category, .enquiry-form, .message-card').forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(30px)';
     el.style.transition = 'all 0.6s ease';

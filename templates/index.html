@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sreerag Rajan - Portfolio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
     <!-- Navigation -->
     <nav>
@@ -18,7 +20,11 @@
                 <li><a href="#achievements">Achievements</a></li>
                 <li><a href="#projects">Projects</a></li>
                 <li><a href="#skills">Skills</a></li>
+                {% if session.get('admin') %}
+                <li><a href="#messages">Messages</a></li>
+                {% else %}
                 <li><a href="#enquiry">Enquiry</a></li>
+                {% endif %}
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <button class="mobile-menu-btn">
@@ -32,9 +38,11 @@
         <div class="hero-content">
             <h1>Sreerag Rajan</h1>
             <h2>Electronics & Communication Engineer</h2>
-            <p>Passionate about IoT, embedded systems, and creating innovative solutions. Specializing in hardware-software integration with a focus on smart systems and automation.</p>
+            <p>Passionate about IoT, embedded systems, and creating innovative solutions. Specializing in
+                hardware-software integration with a focus on smart systems and automation.</p>
             <div class="cta-buttons">
-                <a href="https://drive.google.com/file/d/1r9jR2A2netnv_d3prDUP3JzyUSmLYMoh/view?usp=drive_link" class="btn btn-primary" target="_blank">View Resume</a>
+                <a href="https://drive.google.com/file/d/1r9jR2A2netnv_d3prDUP3JzyUSmLYMoh/view?usp=drive_link"
+                    class="btn btn-primary" target="_blank">View Resume</a>
                 <a href="#contact" class="btn btn-secondary">Get In Touch</a>
             </div>
         </div>
@@ -126,7 +134,8 @@
                 </div>
                 <div class="project-info">
                     <h3>Smart IoT Pothole Detection & Filling System</h3>
-                    <p>Automated system using IoT sensors and embedded systems to detect and report road potholes in real-time.</p>
+                    <p>Automated system using IoT sensors and embedded systems to detect and report road potholes in
+                        real-time.</p>
                     <div class="project-tags">
                         <span class="tag">IoT</span>
                         <span class="tag">Arduino</span>
@@ -140,7 +149,8 @@
                 </div>
                 <div class="project-info">
                     <h3>Enhanced Vehicle Safety System</h3>
-                    <p>Integrated safety system with collision detection and driver assistance features using embedded technology.</p>
+                    <p>Integrated safety system with collision detection and driver assistance features using embedded
+                        technology.</p>
                     <div class="project-tags">
                         <span class="tag">Embedded</span>
                         <span class="tag">Sensors</span>
@@ -203,50 +213,108 @@
         </div>
     </section>
 
-    <!-- Enquiry Section -->
+    <!-- Enquiry / Messages Section -->
+    {% if session.get('admin') %}
+    <!-- ADMIN VIEW → SHOW MESSAGES -->
+    <section id="messages">
+        <div class="section-header">
+            <h2><i class="fas fa-inbox"></i> Messages Received</h2>
+            <p>All enquiries sent by users</p>
+        </div>
+
+        {% if messages %}
+        <div class="messages-grid">
+            {% for msg in messages|reverse %}
+            <div class="message-card">
+                <div class="message-header">
+                    <div class="message-info">
+                        <h3><i class="fas fa-envelope"></i> {{ msg.email }}</h3>
+                        <p class="message-date">
+                            <i class="fas fa-clock"></i> 
+                            {{ msg.created_at.strftime('%B %d, %Y at %I:%M %p') if msg.created_at else 'N/A' }}
+                        </p>
+                    </div>
+                    <span class="message-id">#{{ msg.id }}</span>
+                </div>
+                
+                <div class="message-subject">
+                    <i class="fas fa-tag"></i>
+                    <strong>Subject:</strong> {{ msg.subject }}
+                </div>
+                
+                <div class="message-body">
+                    <strong><i class="fas fa-comment-dots"></i> Message:</strong>
+                    <p>{{ msg.message }}</p>
+                </div>
+                
+                
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="no-messages">
+            <i class="fas fa-inbox"></i>
+            <h3>No messages yet</h3>
+            <p>When users submit the enquiry form, their messages will appear here.</p>
+        </div>
+        {% endif %}
+
+        <div class="admin-actions">
+            <a href="/admin/logout" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </section>
+
+    {% else %}
+    <!-- VIEWER VIEW → SHOW ENQUIRY FORM -->
     <section id="enquiry">
         <div class="enquiry-container">
             <div class="section-header">
                 <h2>Send an Enquiry</h2>
                 <p>Have a question or project in mind? Drop me a message!</p>
             </div>
+
             <div class="enquiry-form">
-                <form id="enquiryForm" action="/submit-enquiry" method="POST">
+                <form action="/submit-enquiry" method="POST">
                     <div class="form-group">
                         <label for="email">
                             <i class="fas fa-envelope"></i> Email Address
                         </label>
                         <input 
                             type="email" 
-                            id="email" 
+                            id="email"
                             name="email" 
-                            placeholder="your.email@example.com" 
+                            placeholder="your.email@example.com"
                             required
                         >
                     </div>
+
                     <div class="form-group">
                         <label for="subject">
                             <i class="fas fa-tag"></i> Subject
                         </label>
                         <input 
                             type="text" 
-                            id="subject" 
+                            id="subject"
                             name="subject" 
-                            placeholder="What's this about?" 
+                            placeholder="What's this about?"
                             required
                         >
                     </div>
+
                     <div class="form-group">
                         <label for="message">
                             <i class="fas fa-comment-dots"></i> Message
                         </label>
                         <textarea 
-                            id="message" 
+                            id="message"
                             name="message" 
-                            placeholder="Tell me more about your enquiry..." 
+                            placeholder="Tell me more about your enquiry..."
                             required
                         ></textarea>
                     </div>
+
                     <button type="submit" class="btn-submit">
                         <span>Send Message</span>
                         <i class="fas fa-paper-plane"></i>
@@ -255,6 +323,7 @@
             </div>
         </div>
     </section>
+    {% endif %}
 
     <!-- Contact Section -->
     <section id="contact">
@@ -288,6 +357,7 @@
         <p>&copy; 2024 Sreerag Rajan. All rights reserved.</p>
     </footer>
 
-    <script src="static/js/personal.js"></script>
+    <script src="{{ url_for('static', filename='js/personal.js') }}"></script>
 </body>
+
 </html>
