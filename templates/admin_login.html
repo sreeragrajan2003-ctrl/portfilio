@@ -1,17 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Admin Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login — Portfolio</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <!-- Custom Admin CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
-<body>
 
-<h2>Admin Login</h2>
+<body class="login-page">
 
-<form method="POST">
-    <input type="text" name="username" placeholder="Username" required><br><br>
-    <input type="password" name="password" placeholder="Password" required><br><br>
-    <button type="submit">Login</button>
-</form>
+    <div class="login-container">
+
+        <!-- Logo / Icon -->
+        <div class="login-icon">
+            <i class="fas fa-shield-alt"></i>
+        </div>
+
+        <h2 class="login-title">Admin Login</h2>
+        <p class="login-subtitle">Secure access to dashboard</p>
+
+        <!-- Flash Alerts -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-wrapper">
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">
+                        <i class="fas fa-info-circle"></i>
+                        <span>{{ message }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- Login Form -->
+        <form method="POST" class="login-form">
+
+            <div class="form-group">
+                <i class="fas fa-user"></i>
+                <input 
+                    type="text" 
+                    name="username" 
+                    placeholder="Username"
+                    required 
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-group">
+                <i class="fas fa-lock"></i>
+                <input 
+                    type="password" 
+                    name="password" 
+                    placeholder="Password"
+                    required 
+                    autocomplete="current-password"
+                >
+            </div>
+
+            <button type="submit" class="btn-primary">
+                <span>Login</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <p class="footer-text">© {{ current_year }} Admin Panel — Secure Login</p>
+
+    </div>
 
 </body>
 </html>
