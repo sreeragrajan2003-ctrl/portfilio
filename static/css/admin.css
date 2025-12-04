@@ -214,3 +214,7 @@ body.login-page::before {
         padding: 2.5rem 1.8rem;
     }
 }
+.flash-error {
+    background: rgba(255, 80, 80, 0.15);
+    border-left: 4px solid #ff5454;
+}

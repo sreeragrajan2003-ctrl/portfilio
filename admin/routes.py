@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session,flash
 from models import AdminUser, db
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -16,7 +16,8 @@ def login():
             session["admin_username"] = admin.username
             return redirect(url_for("admin.dashboard"))
         else:
-            return "Invalid username or password"
+            flash("Invalid username or password", "error")
+            return redirect(url_for("admin.login"))
 
     return render_template("admin_login.html")
 
@@ -26,3 +27,8 @@ def dashboard():
     if "admin_id" not in session:
         return redirect(url_for("admin.login"))
     return render_template("admin_dashboard.html")
+
+@admin_bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for("admin.login"))
