@@ -2,40 +2,36 @@
 {% set page_title = "Add Subsection" %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/admin_forms.css') }}">
 
-<div class="admin-form-wrapper">
-    <h2>➕ Add New Subsection</h2>
+<div class="form-container">
+    <h2>Add New Subsection Item</h2>
 
     <form method="POST">
 
         <div class="form-group">
             <label>Select Section</label>
             <select name="section_id" required>
-                {% for section in sections %}
-                <option value="{{ section.id }}">
-                    {{ section.section_title }}
-                </option>
+                {% for sec in sections %}
+                <option value="{{ sec.id }}">{{ sec.section_title }}</option>
                 {% endfor %}
             </select>
         </div>
 
         <div class="form-group">
-            <label>Subsection Title</label>
-            <input type="text" name="title" required>
+            <label>Content Key</label>
+            <input type="text" name="content_key" placeholder="title, year, image, etc" required>
         </div>
 
         <div class="form-group">
-            <label>Description</label>
-            <textarea name="content"></textarea>
+            <label>Content Value</label>
+            <textarea name="content_value" placeholder="Actual content value" required></textarea>
         </div>
 
-        <button type="submit" class="submit-btn">Save Subsection</button>
+        <input type="hidden" name="group_id" value="0">
+        <input type="hidden" name="item_order" value="0">
 
-        <a href="{{ url_for('admin.dashboard') }}" class="back-btn">
-            ⬅ Back to Dashboard
-        </a>
-
+        <button type="submit" class="btn-primary">Add Subsection</button>
     </form>
 </div>
+
 {% endblock %}

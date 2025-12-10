@@ -22,34 +22,31 @@ class AdminUser(db.Model):
 
 # ===========================
 # SECTION HEAD TABLE
-# (Hero, Projects, Skills, etc.)
 # ===========================
 class SectionHead(db.Model):
     __tablename__ = "section_head"
 
     id = db.Column(db.Integer, primary_key=True)
-    section_name = db.Column(db.String(100), unique=True, nullable=False)  # internal name
-    section_title = db.Column(db.String(200), nullable=False)               # visible title
-    section_description = db.Column(db.Text)                                # optional
+    section_name = db.Column(db.String(100), unique=True, nullable=False)
+    section_title = db.Column(db.String(200), nullable=False)
+    section_description = db.Column(db.Text)
     display_order = db.Column(db.Integer, default=0)
 
-    # Relation to SectionBody
-    items = db.relationship("SectionBody", backref="section", cascade="all, delete")
+    items = db.relationship("SectionBody", backref="section", cascade="all, delete",
+                            order_by="SectionBody.item_order")
 
 
 # ===========================
 # SECTION BODY TABLE
-# (Content key/value items)
 # ===========================
 class SectionBody(db.Model):
     __tablename__ = "section_body"
 
     id = db.Column(db.Integer, primary_key=True)
-
     section_id = db.Column(db.Integer, db.ForeignKey("section_head.id"), nullable=False)
 
-    content_key = db.Column(db.String(100), nullable=False)    # title, subtitle, image, year
+    content_key = db.Column(db.String(100), nullable=False)
     content_value = db.Column(db.Text, nullable=False)
 
-    group_id = db.Column(db.Integer, default=0)                # for list sections
+    group_id = db.Column(db.Integer, default=0)
     item_order = db.Column(db.Integer, default=0)

@@ -4,23 +4,30 @@
 
 {% block content %}
 
-<div class="dashboard-cards">
+{% for section in sections %}
 
-    <div class="card">
-        <i class="fas fa-user-shield"></i>
-        <h3>Logged Admin</h3>
-        <p>{{ session['admin_username'] }}</p>
-    </div>
+<div class="section-block">
 
-    <div class="card">
-        <i class="fas fa-check-circle"></i>
-        <h3>Status</h3>
-        <p>Active</p>
+    <h2 class="section-title">{{ section.section_title }}</h2>
+    <p class="section-desc">{{ section.section_description }}</p>
+
+    <div class="card-grid">
+
+        {% for item in section.items %}
+        <div class="content-card">
+            <h4>{{ item.content_key }}</h4>
+            <p>{{ item.content_value }}</p>
+        </div>
+        {% endfor %}
+
+        {% if section.items|length == 0 %}
+        <p style="color:#aaa;">No items added yet.</p>
+        {% endif %}
+
     </div>
 
 </div>
 
-<h2 class="section-title">Welcome to your Admin Panel</h2>
-<p>This is your admin dashboard. More features will be added soon.</p>
+{% endfor %}
 
 {% endblock %}
