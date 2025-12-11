@@ -4,30 +4,88 @@
 
 {% block content %}
 
-{% for section in sections %}
+<!-- Dashboard Cards -->
+<div class="dashboard-cards">
 
-<div class="section-block">
+    <div class="card">
+        <i class="fas fa-user-shield text-primary"></i>
+        <h3>Logged Admin</h3>
+        <p>{{ session['admin_username'] }}</p>
+    </div>
 
-    <h2 class="section-title">{{ section.section_title }}</h2>
-    <p class="section-desc">{{ section.section_description }}</p>
-
-    <div class="card-grid">
-
-        {% for item in section.items %}
-        <div class="content-card">
-            <h4>{{ item.content_key }}</h4>
-            <p>{{ item.content_value }}</p>
-        </div>
-        {% endfor %}
-
-        {% if section.items|length == 0 %}
-        <p style="color:#aaa;">No items added yet.</p>
-        {% endif %}
-
+    <div class="card">
+        <i class="fas fa-database text-primary"></i>
+        <h3>Total Sections</h3>
+        <p>{{ sections|length }}</p>
     </div>
 
 </div>
 
+<hr>
+
+<!-- Quick Action Buttons -->
+<div class="action-buttons">
+    <a class="btn btn-primary" href="{{ url_for('admin.add_section_head') }}">
+        <i class="fas fa-plus"></i> Add Section
+    </a>
+
+    <a class="btn btn-secondary" href="{{ url_for('admin.add_subsection') }}">
+        <i class="fas fa-plus-circle"></i> Add Subsection
+    </a>
+</div>
+
+<hr>
+
+<!-- Display Sections and Subsections -->
+{% for section in sections %}
+<div class="section-block">
+
+    <div class="section-header">
+        <h2>{{ section.section_title }}</h2>
+        <span class="section-name">({{ section.section_name }})</span>
+
+        <div class="section-actions">
+
+            <a href="{{ url_for('admin.edit_section', id=section.id) }}"
+               class="btn btn-sm btn-warning">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+
+            <a href="{{ url_for('admin.delete_section', id=section.id) }}"
+               class="btn btn-sm btn-danger"
+               onclick="return confirm('Delete this section and all its subsections?');">
+                <i class="fas fa-trash"></i> Delete
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Subsection cards -->
+    <div class="subsection-grid">
+        {% for item in section.items %}
+        <div class="sub-card">
+            <h4>{{ item.content_key }}</h4>
+            <p>{{ item.content_value }}</p>
+
+            <div class="sub-actions">
+
+                <a href="{{ url_for('admin.edit_subsection', id=item.id) }}"
+                   class="btn btn-sm btn-outline-warning">
+                    Edit
+                </a>
+
+                <a href="{{ url_for('admin.delete_subsection', id=item.id) }}"
+                   class="btn btn-sm btn-outline-danger"
+                   onclick="return confirm('Delete this subsection?');">
+                    Delete
+                </a>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
 {% endfor %}
 
 {% endblock %}

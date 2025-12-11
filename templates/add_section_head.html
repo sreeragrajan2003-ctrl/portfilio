@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div class="form-container">
+<div class="admin-form-wrapper">
     <h2>Add New Section</h2>
 
     <form method="POST">
@@ -23,10 +23,9 @@
             <textarea name="section_description" placeholder="Short description (optional)"></textarea>
         </div>
 
-        <!-- ORDER IS HIDDEN BUT STILL SENT -->
         <input type="hidden" name="display_order" value="0">
 
-        <button type="submit" class="btn-primary">Save Section</button>
+        <button type="submit" class="submit-btn">Save Section</button>
     </form>
 </div>
 

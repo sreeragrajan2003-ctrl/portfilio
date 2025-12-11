@@ -1,48 +1,41 @@
 /* ===========================
-   ADMIN FORM CONTAINER
-   =========================== */
-
+   FORM WRAPPER (Unified)
+=========================== */
 .admin-form-wrapper {
-    max-width: 620px;
+    max-width: 650px;
     margin: 40px auto;
-    background: #0f172a;
     padding: 35px;
+    background: rgba(15, 23, 42, 0.85);
     border-radius: 16px;
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.25);
-    animation: fadeIn 0.5s ease-in-out;
+    box-shadow: 0 0 35px rgba(0, 212, 255, 0.25);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.4s ease-in-out;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(25px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .admin-form-wrapper h2 {
     text-align: center;
     font-size: 26px;
-    margin-bottom: 25px;
     color: #38bdf8;
+    margin-bottom: 25px;
 }
 
 /* ===========================
-   FORM FIELDS
-   =========================== */
-
+   UNIFIED FORM-GROUP
+=========================== */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 6px;
     font-weight: 600;
-    color: #e5e7eb;
+    margin-bottom: 8px;
+    display: block;
+    color: #e2e8f0;
 }
 
 .form-group input,
@@ -50,63 +43,57 @@
 .form-group textarea {
     width: 100%;
     padding: 12px 14px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    background: #020617;
-    color: white;
-    font-size: 14px;
-    border: 1px solid #1e293b;
+    font-size: 15px;
+
+    border-radius: 10px;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+
+    background: rgba(2, 6, 23, 0.9);
+    color: #ffffff;
+
+    transition: 0.3s ease;
 }
 
 .form-group textarea {
+    min-height: 100px;
     resize: vertical;
-    min-height: 90px;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
     border-color: #38bdf8;
-    box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+    outline: none;
 }
 
 /* ===========================
    SUBMIT BUTTON
-   =========================== */
-
+=========================== */
 .submit-btn {
     width: 100%;
     padding: 14px;
     background: linear-gradient(135deg, #38bdf8, #0ea5e9);
     border: none;
-    border-radius: 10px;
-    color: #020617;
-    font-weight: bold;
+    border-radius: 12px;
     font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
-    margin-top: 10px;
-    transition: 0.3s ease;
+    color: #020617;
+    transition: 0.25s ease-in-out;
 }
 
 .submit-btn:hover {
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
     transform: translateY(-2px);
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
 }
 
 /* ===========================
-   BACK BUTTON
-   =========================== */
-
-.back-btn {
-    display: block;
-    text-align: center;
-    margin-top: 18px;
-    font-size: 14px;
-    text-decoration: none;
-    color: #38bdf8;
-}
-
-.back-btn:hover {
-    text-decoration: underline;
+   RESPONSIVE
+=========================== */
+@media (max-width: 600px) {
+    .admin-form-wrapper {
+        width: 90%;
+        padding: 25px;
+    }
 }

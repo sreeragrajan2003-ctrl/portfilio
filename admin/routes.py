@@ -127,3 +127,58 @@ def add_subsection():
         return redirect(url_for("admin.dashboard"))
 
     return render_template("add_subsection.html", sections=sections)
+
+#  Delete section 
+@admin_bp.route("/sections/delete/<int:id>")
+@login_required
+def delete_section(id):
+    section = SectionHead.query.get_or_404(id)
+    db.session.delete(section)
+    db.session.commit()
+    flash("Section deleted successfully!", "success")
+    return redirect(url_for("admin.dashboard"))
+
+
+@admin_bp.route("/sections/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_section(id):
+    section = SectionHead.query.get_or_404(id)
+
+    if request.method == "POST":
+        section.section_name = request.form.get("section_name")
+        section.section_title = request.form.get("section_title")
+        section.section_description = request.form.get("section_description")
+        section.display_order = request.form.get("display_order")
+        db.session.commit()
+
+        flash("Section updated successfully!", "success")
+        return redirect(url_for("admin.dashboard"))
+
+    return render_template("edit_section.html", section=section)
+
+
+@admin_bp.route("/subsections/delete/<int:id>")
+@login_required
+def delete_subsection(id):
+    item = SectionBody.query.get_or_404(id)
+    db.session.delete(item)
+    db.session.commit()
+    flash("Subsection deleted", "success")
+    return redirect(url_for("admin.dashboard"))
+
+
+@admin_bp.route("/subsections/edit/<int:id>", methods=["GET", "POST"])
+@login_required
+def edit_subsection(id):
+    item = SectionBody.query.get_or_404(id)
+
+    if request.method == "POST":
+        item.content_key = request.form.get("content_key")
+        item.content_value = request.form.get("content_value")
+        item.item_order = request.form.get("item_order")
+        db.session.commit()
+
+        flash("Subsection updated!", "success")
+        return redirect(url_for("admin.dashboard"))
+
+    return render_template("edit_subsection.html", item=item)

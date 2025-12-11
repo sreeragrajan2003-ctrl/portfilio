@@ -1,6 +1,6 @@
 /* ===========================
    GLOBAL RESET
-   =========================== */
+=========================== */
 * {
     margin: 0;
     padding: 0;
@@ -16,7 +16,7 @@ body.admin-body {
 
 /* ===========================
    SIDEBAR
-   =========================== */
+=========================== */
 .sidebar {
     background: rgba(2, 6, 23, 0.95);
     min-height: 100vh;
@@ -32,21 +32,11 @@ body.admin-body {
 .logo-icon {
     font-size: 36px;
     color: #00d4ff;
-    margin-bottom: 8px;
 }
 
 .sidebar-header h2 {
     color: #ffffff;
     letter-spacing: 2px;
-}
-
-.sidebar-menu {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar-menu li {
-    margin-bottom: 15px;
 }
 
 .sidebar-menu a {
@@ -61,254 +51,111 @@ body.admin-body {
     font-weight: 500;
 }
 
-.sidebar-menu a i {
-    color: #00d4ff;
-}
-
 .sidebar-menu a:hover,
 .sidebar-menu a.active {
     background: rgba(0, 212, 255, 0.15);
 }
 
-.logout-btn {
-    color: #ff4d4d !important;
-}
-
 /* ===========================
    MAIN CONTENT
-   =========================== */
+=========================== */
 .main-content {
     padding: 25px;
-    min-height: 100vh;
 }
 
 /* ===========================
-   HEADER
-   =========================== */
-.admin-header {
-    margin-bottom: 35px;
-}
-
+   ADMIN HEADER
+=========================== */
 .admin-header h1 {
     font-size: 30px;
-    margin-bottom: 5px;
     color: #ffffff !important;
 }
 
 .admin-header p {
     color: #ffffff !important;
-    opacity: 0.9;
 }
 
 /* ===========================
    DASHBOARD CARDS
-   =========================== */
+=========================== */
+.dashboard-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
 .card {
+    flex: 1;
     background: rgba(255, 255, 255, 0.04);
     padding: 26px;
     border-radius: 18px;
     border: 1px solid rgba(0, 212, 255, 0.25);
-    transition: 0.3s ease;
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.15);
     text-align: center;
+    transition: 0.3s ease;
 }
 
 .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.35);
-}
-
-.card i {
-    font-size: 34px;
-    color: #00d4ff;
-    margin-bottom: 10px;
-}
-
-.card h3 {
-    color: #ffffff !important;
-    margin-bottom: 5px;
+    transform: translateY(-5px);
 }
 
 .card p {
-    color: #ffffff !important;
-    opacity: 0.9;
+    color: #ffffff !important; /* FIX: pure white */
 }
 
 /* ===========================
-   FORM STYLING (FIXED WIDE + WHITE)
-   =========================== */
-.form-group {
+   ACTION BUTTONS
+=========================== */
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.action-buttons a {
+    text-decoration: none !important; /* FIX underline issue */
+}
+
+/* ===========================
+   SECTION BLOCKS
+=========================== */
+.section-block {
+    background: rgba(255,255,255,0.05);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 35px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-header h2 {
+    color: #ffffff;
+}
+
+.subsection-grid {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
     margin-top: 18px;
 }
 
-.form-group label {
-    color: #ffffff !important;
-    font-weight: 500;
-    display: block;
-    margin-bottom: 6px;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(0, 212, 255, 0.25);
-    padding: 12px;
+.sub-card {
+    width: 250px;
+    padding: 15px;
+    background: rgba(255,255,255,0.08);
     border-radius: 10px;
+    color: white;
+}
+
+.sub-actions {
+    margin-top: 10px;
+}
+/* Force white text inside dashboard cards */
+.dashboard-cards .card p,
+.dashboard-cards .card h3 {
     color: #ffffff !important;
-    font-size: 15px;
-}
-
-.form-group textarea {
-    resize: vertical;
-    min-height: 120px;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: #00d4ff;
-    box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
-}
-
-/* ===========================
-   BUTTON
-   =========================== */
-.btn-primary {
-    margin-top: 20px;
-    width: 100%;
-    background: #00d4ff;
-    border: none;
-    color: #020617;
-    padding: 12px;
-    border-radius: 50px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    transition: 0.3s ease;
-}
-
-.btn-primary:hover {
-    background: #00b8e6;
-    transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
-}
-
-/* ===========================
-   WIDE FORM FIX (VERY IMPORTANT)
-   =========================== */
-.content-section .row {
-    max-width: 100% !important;
-}
-
-.content-section .card {
-    width: 100%;
-    max-width: 800px;
-}
-
-/* ===========================
-   RESPONSIVE FIX
-   =========================== */
-@media (max-width: 768px) {
-    .main-content {
-        padding: 15px;
-    }
-
-    .content-section .card {
-        max-width: 100%;
-    }
-}
-/* ===========================
-   RIGHT ALIGN ADD FORMS
-   =========================== */
-.content-section .row {
-    display: flex;
-    justify-content: center;   /* ✅ Moves form to the RIGHT */
-}
-/* =========================
-   FORM STYLING
-========================= */
-.form-container {
-    max-width: 550px;
-    margin: auto;
-    background: rgba(255,255,255,0.05);
-    padding: 30px;
-    border-radius: 12px;
-}
-
-.form-container h2 {
-    color: #fff;
-    margin-bottom: 20px;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-
-.form-group label {
-    color: #fff;
-    font-weight: 600;
-    margin-bottom: 8px;
-    display: block;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-}
-
-.btn-primary {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 20px;
-    background: cyan;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* =========================
-   DASHBOARD SECTION CARDS
-========================= */
-.section-block {
-    margin-bottom: 40px;
-}
-
-.section-title {
-    color: #fff;
-    margin-bottom: 8px;
-}
-
-.section-desc {
-    color: #bbb;
-    margin-bottom: 18px;
-}
-
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 18px;
-}
-
-.content-card {
-    background: rgba(255,255,255,0.07);
-    padding: 20px;
-    border-radius: 14px;
-    box-shadow: 0 0 10px rgba(0,255,255,0.1);
-}
-
-.content-card h4 {
-    color: cyan;
-    margin-bottom: 8px;
-}
-
-.content-card p {
-    color: #fff;
-    font-size: 15px;
+    opacity: 1 !important;
 }

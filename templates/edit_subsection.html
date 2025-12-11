@@ -1,0 +1,47 @@
+{% extends "admin_layout.html" %}
+{% set page_title = "Edit Subsection" %}
+
+{% block content %}
+
+<div class="admin-form-wrapper">
+    <h2>Edit Subsection</h2>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Belongs to Section</label>
+            <select name="section_id" required>
+                {% for sec in sections %}
+                <option value="{{ sec.id }}" {% if sec.id == item.section_id %}selected{% endif %}>
+                    {{ sec.section_title }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Content Key</label>
+            <input type="text" name="content_key" value="{{ item.content_key }}" required>
+        </div>
+
+        <div class="form-group">
+            <label>Content Value</label>
+            <textarea name="content_value" required>{{ item.content_value }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Group ID</label>
+            <input type="number" name="group_id" value="{{ item.group_id }}">
+        </div>
+
+        <div class="form-group">
+            <label>Item Order</label>
+            <input type="number" name="item_order" value="{{ item.item_order }}">
+        </div>
+
+        <button type="submit" class="submit-btn">Save Changes</button>
+    </form>
+
+</div>
+
+{% endblock %}
