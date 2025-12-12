@@ -159,3 +159,50 @@ body.admin-body {
     color: #ffffff !important;
     opacity: 1 !important;
 }
+.enquiry-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.enquiry-card {
+    background: rgba(255,255,255,0.06);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,212,255,0.2);
+}
+
+.enquiry-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.enquiry-header strong {
+    color: #00d4ff;
+    font-size: 18px;
+}
+
+.enquiry-header .email {
+    color: #ffffff99;
+}
+
+.enquiry-card p {
+    margin: 5px 0;
+    color: #ffffff;
+}
+
+.enquiry-card .message {
+    margin-top: 10px;
+    opacity: 0.9;
+}
+
+.enquiry-actions {
+    margin-top: 15px;
+    text-align: right;
+}
+
+.enquiry-actions .btn-danger {
+    padding: 6px 12px;
+    border-radius: 8px;
+}

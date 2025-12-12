@@ -1,0 +1,36 @@
+{% extends "admin_layout.html" %}
+{% set page_title = "Enquiries" %}
+
+{% block content %}
+
+<h2 class="mb-4">Viewer Enquiries</h2>
+
+{% if enquiries|length == 0 %}
+    <p>No enquiries yet.</p>
+{% else %}
+
+<div class="enquiry-list">
+    {% for msg in enquiries %}
+    <div class="enquiry-card">
+        <div class="enquiry-header">
+            <strong>{{ msg.name }}</strong>
+            <span class="email">{{ msg.email }}</span>
+        </div>
+
+        <p><strong>Subject:</strong> {{ msg.subject }}</p>
+        <p class="message">{{ msg.message }}</p>
+
+        <div class="enquiry-actions">
+            <a href="{{ url_for('admin.delete_enquiry', id=msg.id) }}"
+               class="btn btn-sm btn-danger"
+               onclick="return confirm('Delete this enquiry?');">
+                <i class="fas fa-trash"></i> Delete
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endif %}
+
+{% endblock %}

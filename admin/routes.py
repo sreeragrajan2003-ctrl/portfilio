@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from models import db, AdminUser, SectionHead, SectionBody
+from models import db, AdminUser, SectionHead, SectionBody, Enquiry
 
 # ===========================
 # LOGIN REQUIRED DECORATOR
@@ -182,3 +182,19 @@ def edit_subsection(id):
         return redirect(url_for("admin.dashboard"))
 
     return render_template("edit_subsection.html", item=item)
+
+
+@admin_bp.route("/enquiries")
+@login_required
+def enquiries():
+    all_enquiries = Enquiry.query.order_by(Enquiry.id.desc()).all()
+    return render_template("admin_enquiries.html", enquiries=all_enquiries)
+
+@admin_bp.route("/enquiry/delete/<int:id>")
+@login_required
+def delete_enquiry(id):
+    msg = Enquiry.query.get_or_404(id)
+    db.session.delete(msg)
+    db.session.commit()
+    flash("Enquiry deleted.", "success")
+    return redirect(url_for("admin.enquiries"))
