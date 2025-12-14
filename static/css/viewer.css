@@ -6,10 +6,7 @@
     --cyan: #00d4ff;
     --blue: #0066ff;
     --dark-blue: #001a33;
-    --glass: rgba(255, 255, 255, 0.1);
     --primary: #00d4ff;
-    --dark: #001a33;
-    --light: #f8f9fa;
 }
 
 /* ========================================
@@ -27,7 +24,7 @@ body {
     color: white;
     overflow-x: hidden;
     background: linear-gradient(135deg, #001a33 0%, #003366 100%);
-    position: relative;
+    padding-top: 100px;
 }
 
 html {
@@ -67,7 +64,6 @@ body::after {
     66% { transform: translate(-50px, 100px) scale(0.9); }
 }
 
-/* Additional floating orbs */
 .container::before {
     content: '';
     position: fixed;
@@ -106,22 +102,15 @@ body::after {
     -webkit-backdrop-filter: blur(20px);
     border-radius: 50px !important;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2), 
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transition: all 0.3s ease;
     animation: slideDown 0.6s ease;
     z-index: 1050;
 }
 
 @keyframes slideDown {
-    from { 
-        opacity: 0; 
-        transform: translateX(-50%) translateY(-50px); 
-    }
-    to { 
-        opacity: 1; 
-        transform: translateX(-50%) translateY(0); 
-    }
+    from { opacity: 0; transform: translateX(-50%) translateY(-50px); }
+    to { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 .navbar-brand {
@@ -139,7 +128,6 @@ body::after {
 
 .navbar-toggler {
     border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
 }
 
 .navbar-toggler-icon {
@@ -178,90 +166,8 @@ body::after {
     width: 60%;
 }
 
-/* ========================================
-   HERO SECTION
-   ======================================== */
-.hero-section {
-    background: transparent;
-    color: white;
-    position: relative;
-    overflow: hidden;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding-top: 100px;
-}
-
-.hero-section::before {
-    display: none;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2;
-}
-
-.hero-section .display-3 {
-    font-size: clamp(2.5rem, 8vw, 5rem);
-    font-weight: 800;
-    margin-bottom: 20px;
-    animation: fadeInUp 0.8s ease;
-}
-
-.hero-section .text-primary {
-    background: linear-gradient(45deg, var(--cyan), var(--blue), #fff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.hero-section .lead {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-    color: var(--cyan);
-    margin-bottom: 15px;
-    animation: fadeInUp 0.8s ease 0.2s both;
-}
-
-.hero-section .fs-5 {
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 700px;
-    margin: 0 auto 40px;
-    animation: fadeInUp 0.8s ease 0.4s both;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.scroll-indicator {
-    position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: bounce 2s infinite;
-    color: var(--cyan);
-    font-size: 2rem;
-    z-index: 2;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateX(-50%) translateY(0);
-    }
-    40% {
-        transform: translateX(-50%) translateY(-20px);
-    }
-    60% {
-        transform: translateX(-50%) translateY(-10px);
-    }
+.nav-link.active {
+    background: rgba(0, 212, 255, 0.15);
 }
 
 /* ========================================
@@ -313,6 +219,10 @@ section:nth-child(even) {
     transition: all 0.4s ease;
     overflow: hidden;
     position: relative;
+    opacity: 1 !important;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
 }
 
 .item-card::before {
@@ -338,35 +248,75 @@ section:nth-child(even) {
     background: rgba(255, 255, 255, 0.08);
 }
 
+.card-body {
+    position: relative;
+    z-index: 1;
+    padding: 2rem !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
 .item-icon {
     text-align: center;
-    padding: 1rem;
+    padding: 0;
+    margin-bottom: 1rem;
 }
 
 .item-icon i {
     color: var(--cyan);
-    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+    filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.6));
+    font-size: 3rem !important;
 }
 
 .card-title {
-    font-size: 1.3rem;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 0.5rem;
+    font-size: 1.85rem !important;
+    font-weight: 700 !important;
+    color: white !important;
+    margin-bottom: 0.5rem !important;
+    opacity: 1 !important;
+    display: block !important;
+    line-height: 1.2;
+    letter-spacing: 0.5px;
 }
 
 .card-subtitle {
-    font-size: 0.95rem;
-    color: var(--cyan);
+    font-size: 1.5rem !important;
+    color: var(--cyan) !important;
+    opacity: 1 !important;
+    display: block !important;
+    font-weight: 600 !important;
+    margin-bottom: 0.75rem !important;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
 }
 
 .card-text {
-    color: rgba(255, 255, 255, 0.7);
-    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85) !important;
+    line-height: 1.8;
+    opacity: 1 !important;
+    display: block !important;
+    font-size: 1.05rem;
+}
+
+.card-body p {
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin-bottom: 0.75rem;
+    opacity: 1 !important;
+    font-size: 1rem;
+    line-height: 1.6;
 }
 
 .card-body p strong {
-    color: var(--cyan);
+    color: var(--cyan) !important;
+    font-weight: 600;
+}
+
+.card-body p:last-child {
+    margin-bottom: 0;
 }
 
 /* ========================================
@@ -468,31 +418,13 @@ section:nth-child(even) {
     box-shadow: 0 15px 40px rgba(0, 212, 255, 0.6);
 }
 
-.btn-outline-light {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
-    backdrop-filter: blur(10px);
-    color: white !important;
-}
-
-.btn-outline-light:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: white !important;
-    transform: translateY(-3px);
-    border-color: var(--cyan) !important;
-}
-
-.btn-lg {
-    animation: fadeInUp 0.8s ease 0.6s both;
-}
-
 /* ========================================
    ALERTS
    ======================================== */
 .alert {
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
 }
 
@@ -521,9 +453,6 @@ footer {
     background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
-/* ========================================
-   TEXT COLORS
-   ======================================== */
 .text-light {
     color: white !important;
 }
@@ -536,6 +465,10 @@ footer {
    RESPONSIVE DESIGN
    ======================================== */
 @media (max-width: 768px) {
+    body {
+        padding-top: 80px;
+    }
+
     .navbar {
         width: 95%;
         padding: 15px 20px !important;
@@ -545,28 +478,31 @@ footer {
     .section-title {
         font-size: 2rem;
     }
-    
-    .hero-section .display-3 {
-        font-size: 2.5rem;
+
+    .card-title {
+        font-size: 1.5rem !important;
     }
-    
+
+    .card-subtitle {
+        font-size: 1.2rem !important;
+    }
+
+    .card-body {
+        padding: 2rem !important;
+    }
+
     .contact-form-wrapper {
         padding: 2rem 1.5rem;
     }
-    
+
     .social-links {
         gap: 1rem;
     }
-    
+
     .social-link {
         width: 50px;
         height: 50px;
         font-size: 1.2rem;
-    }
-
-    .btn-lg {
-        padding: 0.6rem 1.5rem;
-        font-size: 1rem;
     }
 }
 
@@ -603,45 +539,4 @@ footer {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--cyan);
-}
-
-/* ========================================
-   ANIMATIONS
-   ======================================== */
-.animate-fade-in {
-    animation: fadeIn 1s ease-in;
-}
-
-.animate-fade-in-delay {
-    animation: fadeIn 1s ease-in 0.3s both;
-}
-
-.animate-fade-in-delay-2 {
-    animation: fadeIn 1s ease-in 0.6s both;
-}
-
-.animate-fade-in-delay-3 {
-    animation: fadeIn 1s ease-in 0.9s both;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Row spacing */
-.g-4 {
-    --bs-gutter-y: 1.5rem;
-}
-
-/* Ensure proper spacing */
-.py-5 {
-    padding-top: 3rem !important;
-    padding-bottom: 3rem !important;
 }
