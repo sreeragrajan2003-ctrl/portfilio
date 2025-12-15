@@ -66,22 +66,3 @@ def submit_enquiry():
     return redirect(url_for("viewer.index") + "#contact")
 
 
-# ================================
-# ADMIN — VIEW ALL ENQUIRIES
-# ================================
-@viewer_bp.route("/admin/enquiries")
-def view_enquiries():
-    enquiries = Enquiry.query.order_by(Enquiry.id.desc()).all()
-    return render_template("admin_enquiries.html", enquiries=enquiries)
-
-
-# ================================
-# ADMIN — DELETE AN ENQUIRY
-# ================================
-@viewer_bp.route("/admin/enquiry/delete/<int:id>")
-def delete_enquiry(id):
-    enquiry = Enquiry.query.get_or_404(id)
-    db.session.delete(enquiry)
-    db.session.commit()
-    flash("Enquiry deleted successfully!", "success")
-    return redirect(url_for("viewer.view_enquiries"))

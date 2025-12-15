@@ -80,11 +80,7 @@
                     <div class="card item-card h-100">
                         <div class="card-body">
 
-                            {% if item.get('icon') %}
-                            <div class="item-icon mb-3">
-                                <i class="{{ item.icon }} fa-3x"></i>
-                            </div>
-                            {% endif %}
+                            
 
                             {% if item.get('content_key') %}
                             <h5 class="card-title">{{ item.content_key }}</h5>
@@ -106,16 +102,7 @@
                             <p class="card-text">{{ item.description }}</p>
                             {% endif %}
 
-                            <!-- Display all other fields -->
-                            {% for key, value in item.items() %}
-                            {% if key not in
-                            ['id','section_id','group_id','item_order','content_key','content_value','icon','title','subtitle','description']
-                            and value %}
-                            <p class="mb-1">
-                                <strong>{{ key|title }}:</strong> {{ value }}
-                            </p>
-                            {% endif %}
-                            {% endfor %}
+                            
 
                         </div>
                     </div>
