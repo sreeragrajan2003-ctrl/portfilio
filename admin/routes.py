@@ -3,7 +3,6 @@ from models import db, AdminUser, SectionHead, SectionBody, Enquiry
 import os
 from werkzeug.utils import secure_filename
 from models import Resume
-from flask import current_app
 
 
 # ===========================
@@ -219,7 +218,7 @@ def upload_resume():
         flash("Only PDF allowed", "error")
         return redirect(url_for("admin.dashboard"))
 
-    upload_folder = os.path.join(current_app.root_path, "static/uploads/resume")
+    upload_folder =  "static/uploads/resume"
     os.makedirs(upload_folder, exist_ok=True)
 
     # 🔥 Delete old resume from DB + folder
