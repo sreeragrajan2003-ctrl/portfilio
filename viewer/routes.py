@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from models import db, SectionHead, SectionBody, Enquiry
+from models import db, SectionHead, SectionBody, Enquiry,Resume
+
 
 viewer_bp = Blueprint("viewer", __name__)
 
@@ -13,7 +14,7 @@ def index():
 
     # Load all sections in display order
     sections = SectionHead.query.order_by(SectionHead.display_order.asc()).all()
-
+    resume = Resume.query.first()
     for sec in sections:
         # Load subsection items for this section
         items = SectionBody.query.filter_by(section_id=sec.id).order_by(SectionBody.item_order.asc()).all()
@@ -35,7 +36,7 @@ def index():
             "items": item_list
         })
 
-    return render_template("index.html", portfolio_data=portfolio_data)
+    return render_template("index.html", portfolio_data=portfolio_data,resume=resume)
 
 
 # ================================

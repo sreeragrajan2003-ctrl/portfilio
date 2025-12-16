@@ -1,5 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from models import db, AdminUser, SectionHead, SectionBody, Enquiry
+import os
+from werkzeug.utils import secure_filename
+from models import Resume
+from flask import current_app
+
 
 # ===========================
 # LOGIN REQUIRED DECORATOR
@@ -39,16 +44,18 @@ def login():
 # ===========================
 # DASHBOARD (SHOW SECTIONS + SUBSECTIONS)
 # ===========================
-@admin_bp.route('/dashboard')
+@admin_bp.route("/dashboard")
 @login_required
 def dashboard():
-    # ✅ Order section by display_order
-    sections = SectionHead.query.order_by(SectionHead.display_order.asc()).all()
+    sections = SectionHead.query.order_by(SectionHead.display_order).all()
+    resume = Resume.query.first()
 
     return render_template(
         "admin_dashboard.html",
-        sections=sections
+        sections=sections,
+        resume=resume
     )
+
 
 
 
@@ -198,3 +205,39 @@ def delete_enquiry(id):
     db.session.commit()
     flash("Enquiry deleted.", "success")
     return redirect(url_for("admin.enquiries"))
+
+@admin_bp.route("/resume/upload", methods=["POST"])
+@login_required
+def upload_resume():
+    file = request.files.get("resume")
+
+    if not file or file.filename == "":
+        flash("No file selected", "error")
+        return redirect(url_for("admin.dashboard"))
+
+    if not file.filename.lower().endswith(".pdf"):
+        flash("Only PDF allowed", "error")
+        return redirect(url_for("admin.dashboard"))
+
+    upload_folder = os.path.join(current_app.root_path, "static/uploads/resume")
+    os.makedirs(upload_folder, exist_ok=True)
+
+    # 🔥 Delete old resume from DB + folder
+    old = Resume.query.first()
+    if old:
+        old_path = os.path.join(upload_folder, old.filename)
+        if os.path.exists(old_path):
+            os.remove(old_path)
+        db.session.delete(old)
+
+    # Save new resume
+    filename = secure_filename(file.filename)
+    file.save(os.path.join(upload_folder, filename))
+
+    new_resume = Resume(filename=filename)
+    db.session.add(new_resume)
+    db.session.commit()
+
+    flash("Resume uploaded successfully!", "success")
+    return redirect(url_for("admin.dashboard"))
+
