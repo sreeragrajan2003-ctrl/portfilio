@@ -240,3 +240,24 @@ def upload_resume():
     flash("Resume uploaded successfully!", "success")
     return redirect(url_for("admin.dashboard"))
 
+@admin_bp.route("/enquiry/read/<int:id>")
+@login_required
+def mark_enquiry_read(id):
+    enquiry = Enquiry.query.get_or_404(id)
+
+    enquiry.is_read = True
+    db.session.commit()
+
+    flash("Enquiry marked as read", "success")
+    return redirect(url_for("admin.enquiries"))
+
+@admin_bp.route("/enquiry/read-all")
+@login_required
+def mark_all_enquiries_read():
+    Enquiry.query.filter_by(is_read=False).update(
+        {"is_read": True}
+    )
+    db.session.commit()
+
+    flash("All enquiries marked as read", "success")
+    return redirect(url_for("admin.enquiries"))

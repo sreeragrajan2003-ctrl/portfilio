@@ -4,32 +4,55 @@
 {% block content %}
 
 <h2 class="mb-4">Viewer Enquiries</h2>
+<div class="action-buttons" style="justify-content: flex-end;">
+    <a href="{{ url_for('admin.mark_all_enquiries_read') }}" class="btn btn-sm btn-primary"
+        onclick="return confirm('Mark all enquiries as read?');">
+        ✔ Mark All as Read
+    </a>
+</div>
+
 
 {% if enquiries|length == 0 %}
-    <p>No enquiries yet.</p>
+<p>No enquiries yet.</p>
 {% else %}
 
 <div class="enquiry-list">
-    {% for msg in enquiries %}
-    <div class="enquiry-card">
-        <div class="enquiry-header">
-            <strong>{{ msg.name }}</strong>
-            <span class="email">{{ msg.email }}</span>
-        </div>
 
-        <p><strong>Subject:</strong> {{ msg.subject }}</p>
-        <p class="message">{{ msg.message }}</p>
+{% for enquiry in enquiries %}
+<div class="enquiry-card {% if not enquiry.is_read %}unread{% endif %}">
 
-        <div class="enquiry-actions">
-            <a href="{{ url_for('admin.delete_enquiry', id=msg.id) }}"
-               class="btn btn-sm btn-danger"
-               onclick="return confirm('Delete this enquiry?');">
-                <i class="fas fa-trash"></i> Delete
-            </a>
-        </div>
+    <div class="enquiry-header">
+        <strong>{{ enquiry.name }}</strong>
+        <span class="email">{{ enquiry.email }}</span>
     </div>
-    {% endfor %}
+
+    <p><strong>Subject:</strong> {{ enquiry.subject }}</p>
+    <p class="message">{{ enquiry.message }}</p>
+
+    <div class="enquiry-actions">
+
+        {% if not enquiry.is_read %}
+        <a href="{{ url_for('admin.mark_enquiry_read', id=enquiry.id) }}"
+           class="btn btn-sm btn-success">
+            Mark as Read
+        </a>
+        {% else %}
+        <span class="badge bg-success">Read</span>
+        {% endif %}
+
+        <a href="{{ url_for('admin.delete_enquiry', id=enquiry.id) }}"
+           class="btn btn-sm btn-danger"
+           onclick="return confirm('Delete this enquiry?');">
+            Delete
+        </a>
+
+    </div>
+
 </div>
+{% endfor %}
+
+</div>
+
 
 {% endif %}
 

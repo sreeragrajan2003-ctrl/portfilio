@@ -218,3 +218,16 @@ body.login-page::before {
     background: rgba(255, 80, 80, 0.15);
     border-left: 4px solid #ff5454;
 }
+
+
+.enquiry-card.unread {
+    border-left: 4px solid #00d4ff;
+    background: rgba(0, 212, 255, 0.08);
+}
+
+.enquiry-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 15px;
+}
