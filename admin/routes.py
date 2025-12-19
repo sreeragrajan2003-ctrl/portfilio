@@ -102,37 +102,34 @@ def add_section_head():
 # ===========================
 # ADD SUBSECTION
 # ===========================
-@admin_bp.route("/subsections/add", methods=["GET", "POST"])
+@admin_bp.route("/subsection/add", methods=["GET", "POST"])
 @login_required
 def add_subsection():
-    sections = SectionHead.query.order_by(SectionHead.display_order).all()
+
+    sections = SectionHead.query.all()
 
     if request.method == "POST":
+
         section_id = request.form.get("section_id")
-        content_key = request.form.get("content_key")
-        content_value = request.form.get("content_value")
-        group_id = request.form.get("group_id", 0)
-        item_order = request.form.get("item_order", 0)
 
-        if not content_key or not content_value:
-            flash("All fields are required!", "error")
-            return redirect(url_for("admin.add_subsection"))
+        keys = request.form.getlist("content_key[]")
+        values = request.form.getlist("content_value[]")
 
-        new_item = SectionBody(
-            section_id=section_id,
-            content_key=content_key,
-            content_value=content_value,
-            group_id=group_id,
-            item_order=item_order
-        )
+        for key, value in zip(keys, values):
+            if key.strip() and value.strip():
+                item = SectionBody(
+                    section_id=section_id,
+                    content_key=key,
+                    content_value=value
+                )
+                db.session.add(item)
 
-        db.session.add(new_item)
         db.session.commit()
-
-        flash("Subsection added successfully!", "success")
+        flash("Subsections added successfully", "success")
         return redirect(url_for("admin.dashboard"))
 
     return render_template("add_subsection.html", sections=sections)
+
 
 #  Delete section 
 @admin_bp.route("/sections/delete/<int:id>")
