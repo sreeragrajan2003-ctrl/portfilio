@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash,jsonify
 from models import db, AdminUser, SectionHead, SectionBody, Enquiry
 import os
 from werkzeug.utils import secure_filename
@@ -258,3 +258,34 @@ def mark_all_enquiries_read():
 
     flash("All enquiries marked as read", "success")
     return redirect(url_for("admin.enquiries"))
+
+@admin_bp.route("/sections/reorder", methods=["POST"])
+@login_required
+def reorder_sections():
+    data = request.get_json()
+
+    for item in data:
+        section = SectionHead.query.get(item["id"])
+        section.display_order = item["position"]
+
+    db.session.commit()
+    return {"status": "ok"}
+
+
+
+@admin_bp.route("/sections/update-order", methods=["POST"])
+@login_required
+def update_section_order():
+    data = request.get_json()
+    order = data.get("order", [])
+
+    # order = ['3', '1', '2'] (section IDs in new order)
+
+    for index, section_id in enumerate(order):
+        section = SectionHead.query.get(int(section_id))
+        if section:
+            section.display_order = index
+
+    db.session.commit()
+
+    return jsonify({"status": "success"})
