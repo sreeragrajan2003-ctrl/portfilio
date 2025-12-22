@@ -649,3 +649,21 @@ body.admin-body {
         width: 100%;
     }
 }
+/* Prevent text selection */
+.section-block,
+.section-header,
+.section-name,
+.section-actions,
+.subsection-grid {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Drag handle only */
+.drag-handle {
+    cursor: grab;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}

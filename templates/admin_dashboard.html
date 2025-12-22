@@ -65,51 +65,77 @@
 <hr>
 
 <!-- Display Sections and Subsections -->
-{% for section in sections %}
-<div class="section-block">
+<div id="sections-container">
 
-    <div class="section-header">
-        <h2>{{ section.section_title }}</h2>
-        <span class="section-name">({{ section.section_name }})</span>
+    {% for section in sections %}
+    <div class="section-block" data-id="{{ section.id }}">
 
-        <div class="section-actions">
+        <div class="section-header">
+            <h2>{{ section.section_title }}</h2>
+            <span class="section-name">({{ section.section_name }})</span>
 
-            <a href="{{ url_for('admin.edit_section', id=section.id) }}" class="btn btn-sm btn-warning">
-                <i class="fas fa-edit"></i> Edit
-            </a>
+            <!-- Drag Handle -->
+            <span class="drag-handle" title="Drag to reorder">
+                <i class="fas fa-grip-vertical"></i>
+            </span>
 
-            <a href="{{ url_for('admin.delete_section', id=section.id) }}" class="btn btn-sm btn-danger"
-                onclick="return confirm('Delete this section and all its subsections?');">
-                <i class="fas fa-trash"></i> Delete
-            </a>
-
-        </div>
-    </div>
-
-    <!-- Subsection cards -->
-    <div class="subsection-grid">
-        {% for item in section.items %}
-        <div class="sub-card">
-            <h4>{{ item.content_key }}</h4>
-            <p>{{ item.content_value }}</p>
-
-            <div class="sub-actions">
-
-                <a href="{{ url_for('admin.edit_subsection', id=item.id) }}" class="btn btn-sm btn-outline-warning">
-                    Edit
+            <div class="section-actions">
+                <a href="{{ url_for('admin.edit_section', id=section.id) }}" class="btn btn-sm btn-warning">
+                    <i class="fas fa-edit"></i> Edit
                 </a>
 
-                <a href="{{ url_for('admin.delete_subsection', id=item.id) }}" class="btn btn-sm btn-outline-danger"
-                    onclick="return confirm('Delete this subsection?');">
-                    Delete
+                <a href="{{ url_for('admin.delete_section', id=section.id) }}" class="btn btn-sm btn-danger"
+                    onclick="return confirm('Delete this section and all its subsections?');">
+                    <i class="fas fa-trash"></i> Delete
                 </a>
-
             </div>
         </div>
-        {% endfor %}
+
+        <!-- Subsection cards -->
+        <div class="subsection-grid">
+            {% for item in section.items %}
+            <div class="sub-card">
+                <h4>{{ item.content_key }}</h4>
+                <p>{{ item.content_value }}</p>
+
+                <div class="sub-actions">
+                    <a href="{{ url_for('admin.edit_subsection', id=item.id) }}" class="btn btn-sm btn-outline-warning">
+                        Edit
+                    </a>
+
+                    <a href="{{ url_for('admin.delete_subsection', id=item.id) }}" class="btn btn-sm btn-outline-danger"
+                        onclick="return confirm('Delete this subsection?');">
+                        Delete
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
     </div>
+    {% endfor %}
 
 </div>
-{% endfor %}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const container = document.querySelector("#sections-container");
+
+        if (container) {
+            new Sortable(container, {
+                handle: ".drag-handle",
+                animation: 150,
+                ghostClass: "drag-ghost",
+                onEnd: function (evt) {
+                    console.log("Moved from", evt.oldIndex, "to", evt.newIndex);
+                    // later → auto save to DB
+                }
+            });
+        }
+
+    });
+</script>
+
 
 {% endblock %}
