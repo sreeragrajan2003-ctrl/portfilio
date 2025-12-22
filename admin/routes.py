@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash,jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify
 from models import db, AdminUser, SectionHead, SectionBody, Enquiry
 import os
 from werkzeug.utils import secure_filename
@@ -54,8 +54,6 @@ def dashboard():
         sections=sections,
         resume=resume
     )
-
-
 
 
 # ===========================
@@ -193,6 +191,7 @@ def enquiries():
     all_enquiries = Enquiry.query.order_by(Enquiry.id.desc()).all()
     return render_template("admin_enquiries.html", enquiries=all_enquiries)
 
+
 @admin_bp.route("/enquiry/delete/<int:id>")
 @login_required
 def delete_enquiry(id):
@@ -201,6 +200,7 @@ def delete_enquiry(id):
     db.session.commit()
     flash("Enquiry deleted.", "success")
     return redirect(url_for("admin.enquiries"))
+
 
 @admin_bp.route("/resume/upload", methods=["POST"])
 @login_required
@@ -215,7 +215,7 @@ def upload_resume():
         flash("Only PDF allowed", "error")
         return redirect(url_for("admin.dashboard"))
 
-    upload_folder =  "static/uploads/resume"
+    upload_folder = "static/uploads/resume"
     os.makedirs(upload_folder, exist_ok=True)
 
     # 🔥 Delete old resume from DB + folder
@@ -237,6 +237,7 @@ def upload_resume():
     flash("Resume uploaded successfully!", "success")
     return redirect(url_for("admin.dashboard"))
 
+
 @admin_bp.route("/enquiry/read/<int:id>")
 @login_required
 def mark_enquiry_read(id):
@@ -247,6 +248,7 @@ def mark_enquiry_read(id):
 
     flash("Enquiry marked as read", "success")
     return redirect(url_for("admin.enquiries"))
+
 
 @admin_bp.route("/enquiry/read-all")
 @login_required
@@ -259,28 +261,18 @@ def mark_all_enquiries_read():
     flash("All enquiries marked as read", "success")
     return redirect(url_for("admin.enquiries"))
 
-@admin_bp.route("/sections/reorder", methods=["POST"])
-@login_required
-def reorder_sections():
-    data = request.get_json()
 
-    for item in data:
-        section = SectionHead.query.get(item["id"])
-        section.display_order = item["position"]
-
-    db.session.commit()
-    return {"status": "ok"}
-
-
-
+# ===========================
+# UPDATE SECTION ORDER (DRAG & DROP)
+# ===========================
 @admin_bp.route("/sections/update-order", methods=["POST"])
 @login_required
 def update_section_order():
+    """Handle drag-and-drop section reordering"""
     data = request.get_json()
     order = data.get("order", [])
 
     # order = ['3', '1', '2'] (section IDs in new order)
-
     for index, section_id in enumerate(order):
         section = SectionHead.query.get(int(section_id))
         if section:
