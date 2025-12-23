@@ -1,5 +1,5 @@
 // ========================================
-// MODERN PORTFOLIO JAVASCRIPT - OPTIMIZED
+// MODERN PORTFOLIO JAVASCRIPT - DARK THEME
 // ========================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetSection = document.querySelector(targetId);
             if (targetSection) {
                 const navbarHeight = navbar.offsetHeight;
-                const targetPosition = targetSection.offsetTop - navbarHeight - 20;
+                const targetPosition = targetSection.offsetTop - navbarHeight;
                 
                 window.scrollTo({
                     top: targetPosition,
@@ -42,12 +42,10 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', function() {
         const scrolled = window.pageYOffset;
         
-        if (scrolled > 100) {
-            navbar.style.background = 'rgba(255, 255, 255, 0.12)';
-            navbar.style.boxShadow = '0 8px 32px rgba(0, 212, 255, 0.3)';
+        if (scrolled > 50) {
+            navbar.classList.add('scrolled');
         } else {
-            navbar.style.background = 'rgba(255, 255, 255, 0.08)';
-            navbar.style.boxShadow = '0 8px 32px rgba(0, 212, 255, 0.2)';
+            navbar.classList.remove('scrolled');
         }
     });
 
@@ -77,66 +75,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ========================================
-    // CARD ANIMATION ON SCROLL (DISABLED - Causing visibility issues)
+    // SCROLL REVEAL ANIMATION
     // ========================================
-    // Cards are now always visible without animation
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
 
-    // ========================================
-    // FLOATING ORBS
-    // ========================================
-    function createFloatingOrbs() {
-        const orbContainer = document.createElement('div');
-        orbContainer.style.cssText = `
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            pointer-events: none;
-        `;
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
 
-        for (let i = 0; i < 3; i++) {
-            const orb = document.createElement('div');
-            orb.style.cssText = `
-                position: absolute;
-                width: ${150 + Math.random() * 150}px;
-                height: ${150 + Math.random() * 150}px;
-                background: radial-gradient(circle, ${i % 2 === 0 ? '#00d4ff' : '#0066ff'} 0%, transparent 70%);
-                border-radius: 50%;
-                filter: blur(60px);
-                opacity: 0.2;
-                top: ${Math.random() * 100}%;
-                left: ${Math.random() * 100}%;
-                animation: float${i + 3} ${20 + Math.random() * 10}s infinite;
-            `;
-            orbContainer.appendChild(orb);
-        }
-
-        document.body.appendChild(orbContainer);
-    }
-
-    // Add orb animations
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes float3 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-80px, 60px) scale(1.2); }
-            66% { transform: translate(60px, -80px) scale(0.8); }
-        }
-        @keyframes float4 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(50px, 80px) scale(1.15); }
-        }
-        @keyframes float5 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(70px, -40px) scale(0.9); }
-            75% { transform: translate(-60px, 70px) scale(1.1); }
-        }
-    `;
-    document.head.appendChild(style);
-
-    createFloatingOrbs();
+    // Observe all cards
+    document.querySelectorAll('.item-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
 
     // ========================================
     // AUTO-DISMISS ALERTS
@@ -148,5 +109,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 
-    console.log('🚀 Portfolio Loaded!');
+    // ========================================
+    // PARALLAX EFFECT ON SCROLL - DISABLED (causes misalignment)
+    // ========================================
+    // Parallax effect disabled to prevent title misalignment
+
+    // ========================================
+    // TYPING EFFECT FOR HERO SECTION - DISABLED
+    // ========================================
+    // Typing effect disabled to show title immediately
+
+    console.log('🚀 Portfolio Loaded - Dark Theme!');
 });
