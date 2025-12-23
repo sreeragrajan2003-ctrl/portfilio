@@ -4,6 +4,18 @@
 
 {% block content %}
 
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ 'success' if category == 'success' else 'danger' }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endfor %}
+{% endif %}
+{% endwith %}
+
 <!-- Dashboard Cards -->
 <div class="dashboard-cards">
 
@@ -19,11 +31,17 @@
         <p>{{ sections|length }}</p>
     </div>
 
+    <div class="card">
+        <i class="fas fa-file-pdf text-primary"></i>
+        <h3>Resume Status</h3>
+        <p>{% if resume %}Uploaded{% else %}Not Uploaded{% endif %}</p>
+    </div>
+
 </div>
 
 <hr>
 
-<!-- Quick Action Buttons -->
+<!-- Quick Actions -->
 <div class="action-buttons">
     <a class="btn btn-primary" href="{{ url_for('admin.add_section_head') }}">
         <i class="fas fa-plus"></i> Add Section
@@ -35,107 +53,196 @@
 </div>
 
 <hr>
-<!-- Resume Section -->
-<h3 class="mt-4">Resume</h3>
 
-<form action="{{ url_for('admin.upload_resume') }}" method="POST" enctype="multipart/form-data" class="mb-3">
+<!-- Resume Upload Section -->
+<div class="resume-upload-section">
+    <h3>
+        <i class="fas fa-file-upload"></i> Resume Management
+    </h3>
 
-    <input type="file" name="resume" accept=".pdf" id="resumeUpload" hidden onchange="this.form.submit()">
-
-    <label for="resumeUpload" class="btn btn-primary">
-        <i class="fas fa-upload"></i>
-        {{ "Replace Resume" if resume else "Upload Resume" }}
-    </label>
-</form>
-
-{% if resume %}
-<div class="card" style="max-width: 320px;">
-    <div class="card-body text-center">
-        <i class="fas fa-file-pdf fa-3x text-danger mb-2"></i>
-        <h5>Resume</h5>
-
-        <a href="{{ url_for('static', filename='uploads/resume/' + resume.filename) }}" target="_blank"
-            class="btn btn-outline-primary btn-sm mt-2">
+    {% if resume %}
+    <div class="current-resume">
+        <p>
+            <strong>Current Resume:</strong> {{ resume.filename }}
+        </p>
+        <a href="{{ url_for('static', filename='uploads/resume/' + resume.filename) }}" 
+           target="_blank" 
+           class="btn btn-sm btn-info mt-2">
             <i class="fas fa-eye"></i> View Resume
         </a>
     </div>
+    {% else %}
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle"></i> No resume uploaded yet.
+    </div>
+    {% endif %}
+
+    <form method="POST" 
+          action="{{ url_for('admin.upload_resume') }}" 
+          enctype="multipart/form-data" 
+          style="margin-top: 15px;">
+        
+        <div class="form-group" style="margin-bottom: 15px;">
+            <label style="color: white; margin-bottom: 8px; display: block;">
+                {% if resume %}Upload New Resume (will replace current){% else %}Upload Resume{% endif %}
+            </label>
+            <input type="file" 
+                   name="resume" 
+                   accept=".pdf" 
+                   required 
+                   class="form-control" 
+                   style="background: rgba(2,6,23,0.9); color: white; border: 1px solid rgba(0,212,255,0.3); border-radius: 10px; padding: 10px;">
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            <i class="fas fa-upload"></i> {% if resume %}Replace Resume{% else %}Upload Resume{% endif %}
+        </button>
+    </form>
 </div>
-{% endif %}
 
 <hr>
 
-<!-- Display Sections and Subsections -->
+<!-- DRAGGABLE SECTIONS -->
 <div id="sections-container">
 
-    {% for section in sections %}
-    <div class="section-block" data-id="{{ section.id }}">
+{% for section in sections %}
+<div class="section-block" data-id="{{ section.id }}">
 
-        <div class="section-header">
-            <h2>{{ section.section_title }}</h2>
-            <span class="section-name">({{ section.section_name }})</span>
+    <div class="section-header">
 
-            <!-- Drag Handle -->
-            <span class="drag-handle" title="Drag to reorder">
+        <div class="section-title-wrap">
+            <span class="drag-handle">
                 <i class="fas fa-grip-vertical"></i>
             </span>
 
-            <div class="section-actions">
-                <a href="{{ url_for('admin.edit_section', id=section.id) }}" class="btn btn-sm btn-warning">
-                    <i class="fas fa-edit"></i> Edit
-                </a>
-
-                <a href="{{ url_for('admin.delete_section', id=section.id) }}" class="btn btn-sm btn-danger"
-                    onclick="return confirm('Delete this section and all its subsections?');">
-                    <i class="fas fa-trash"></i> Delete
-                </a>
-            </div>
+            <h2>{{ section.section_title }}</h2>
+            <span class="section-name">({{ section.section_name }})</span>
         </div>
 
-        <!-- Subsection cards -->
-        <div class="subsection-grid">
-            {% for item in section.items %}
-            <div class="sub-card">
-                <h4>{{ item.content_key }}</h4>
-                <p>{{ item.content_value }}</p>
+        <div class="section-actions">
+            <a href="{{ url_for('admin.edit_section', id=section.id) }}"
+               class="btn btn-sm btn-warning">
+                <i class="fas fa-edit"></i>
+            </a>
 
-                <div class="sub-actions">
-                    <a href="{{ url_for('admin.edit_subsection', id=item.id) }}" class="btn btn-sm btn-outline-warning">
-                        Edit
-                    </a>
-
-                    <a href="{{ url_for('admin.delete_subsection', id=item.id) }}" class="btn btn-sm btn-outline-danger"
-                        onclick="return confirm('Delete this subsection?');">
-                        Delete
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
+            <a href="{{ url_for('admin.delete_section', id=section.id) }}"
+               class="btn btn-sm btn-danger"
+               onclick="return confirm('Delete this section and all subsections?');">
+                <i class="fas fa-trash"></i>
+            </a>
         </div>
 
     </div>
-    {% endfor %}
+
+    <!-- Subsections -->
+    <div class="subsection-grid">
+        {% for item in section.items %}
+        <div class="sub-card">
+            <h4>{{ item.content_key }}</h4>
+            <p>{{ item.content_value }}</p>
+
+            <div class="sub-actions">
+                <a href="{{ url_for('admin.edit_subsection', id=item.id) }}"
+                   class="btn btn-sm btn-outline-warning">Edit</a>
+
+                <a href="{{ url_for('admin.delete_subsection', id=item.id) }}"
+                   class="btn btn-sm btn-outline-danger"
+                   onclick="return confirm('Delete this subsection?');">
+                    Delete
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
 </div>
+{% endfor %}
+
+</div>
+
+<!-- SortableJS -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-        const container = document.querySelector("#sections-container");
+    const container = document.getElementById("sections-container");
 
-        if (container) {
-            new Sortable(container, {
-                handle: ".drag-handle",
-                animation: 150,
-                ghostClass: "drag-ghost",
-                onEnd: function (evt) {
-                    console.log("Moved from", evt.oldIndex, "to", evt.newIndex);
-                    // later → auto save to DB
-                }
-            });
-        }
+    if (container) {
+        new Sortable(container, {
+            handle: ".drag-handle",
+            animation: 150,
+            ghostClass: "drag-ghost",
+            onEnd: function (evt) {
+                // Get all section IDs in their new order
+                const sections = container.querySelectorAll('.section-block');
+                const order = Array.from(sections).map(section => section.dataset.id);
 
-    });
+                console.log('New order:', order);
+
+                // Send the new order to the server
+                fetch("{{ url_for('admin.update_section_order') }}", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ order: order })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Order saved successfully:', data);
+                    // Optional: Show a success message
+                    showSuccessMessage('Section order updated!');
+                })
+                .catch(error => {
+                    console.error('Error saving order:', error);
+                    // Optional: Show an error message
+                    showErrorMessage('Failed to update order. Please refresh and try again.');
+                });
+            }
+        });
+    }
+
+});
+
+// Optional: Helper functions to show feedback messages
+function showSuccessMessage(message) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-success alert-dismissible fade show';
+    alert.style.position = 'fixed';
+    alert.style.top = '20px';
+    alert.style.right = '20px';
+    alert.style.zIndex = '9999';
+    alert.style.minWidth = '300px';
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alert);
+    
+    setTimeout(() => {
+        alert.remove();
+    }, 3000);
+}
+
+function showErrorMessage(message) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-danger alert-dismissible fade show';
+    alert.style.position = 'fixed';
+    alert.style.top = '20px';
+    alert.style.right = '20px';
+    alert.style.zIndex = '9999';
+    alert.style.minWidth = '300px';
+    alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alert);
+    
+    setTimeout(() => {
+        alert.remove();
+    }, 3000);
+}
 </script>
-
 
 {% endblock %}
