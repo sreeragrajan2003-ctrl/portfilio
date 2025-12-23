@@ -97,7 +97,7 @@ body::after {
     left: 50%;
     transform: translateX(-50%);
     width: auto !important;
-    max-width: 90%;
+    max-width: 100%;
     padding: 15px 40px !important;
     background: rgba(0, 0, 0, 0.4) !important;
     backdrop-filter: blur(20px);
@@ -242,7 +242,7 @@ section:nth-child(even) {
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     position: relative;
-    min-height: 280px;
+    min-height: 150px;
     display: flex;
     flex-direction: column;
 }

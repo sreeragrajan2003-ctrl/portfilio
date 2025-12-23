@@ -168,21 +168,30 @@ def delete_subsection(id):
     return redirect(url_for("admin.dashboard"))
 
 
-@admin_bp.route("/subsections/edit/<int:id>", methods=["GET", "POST"])
+
+@admin_bp.route("/subsection/edit/<int:id>", methods=["GET", "POST"])
 @login_required
 def edit_subsection(id):
-    item = SectionBody.query.get_or_404(id)
+    item = SectionBody.query.get_or_404(id)  # ✅ FIXED
+
+    sections = SectionHead.query.order_by(SectionHead.display_order).all()
 
     if request.method == "POST":
+        item.section_id = request.form.get("section_id")
         item.content_key = request.form.get("content_key")
         item.content_value = request.form.get("content_value")
+        item.group_id = request.form.get("group_id")
         item.item_order = request.form.get("item_order")
-        db.session.commit()
 
-        flash("Subsection updated!", "success")
+        db.session.commit()
+        flash("Subsection updated successfully", "success")
         return redirect(url_for("admin.dashboard"))
 
-    return render_template("edit_subsection.html", item=item)
+    return render_template(
+        "edit_subsection.html",
+        item=item,
+        sections=sections
+    )
 
 
 @admin_bp.route("/enquiries")
