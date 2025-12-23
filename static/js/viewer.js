@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const navLinks = document.querySelectorAll('a[href^="#"]');
 
     // ========================================
-    // SMOOTH SCROLLING
+    // SMOOTH SCROLLING - CENTER TITLE IN VIEWPORT
     // ========================================
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
@@ -18,13 +18,59 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const targetSection = document.querySelector(targetId);
             if (targetSection) {
-                const navbarHeight = navbar.offsetHeight;
-                const targetPosition = targetSection.offsetTop - navbarHeight;
+                // Special handling for contact section
+                const isContactSection = targetId === '#contact';
                 
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+                if (isContactSection) {
+                    // For contact, position "Get In Touch" title just below navbar
+                    const sectionTitle = targetSection.querySelector('.section-title');
+                    if (sectionTitle) {
+                        const titleTop = sectionTitle.getBoundingClientRect().top + window.pageYOffset;
+                        // Position title about 120px from top (just below navbar)
+                        const targetScroll = titleTop - 120;
+                        
+                        window.scrollTo({
+                            top: targetScroll,
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        // Fallback
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                } else {
+                    // For other sections, center the title
+                    setTimeout(() => {
+                        const sectionTitle = targetSection.querySelector('.section-title');
+                        
+                        if (sectionTitle) {
+                            // Get title's current position on page
+                            const titleTop = sectionTitle.getBoundingClientRect().top + window.pageYOffset;
+                            const titleHeight = sectionTitle.offsetHeight;
+                            const windowHeight = window.innerHeight;
+                            
+                            // Calculate scroll position to center the title
+                            const targetScroll = titleTop - (windowHeight / 2) + (titleHeight / 2);
+                            
+                            window.scrollTo({
+                                top: targetScroll,
+                                behavior: 'smooth'
+                            });
+                        } else {
+                            // Fallback: just go to section start
+                            window.scrollTo({
+                                top: targetSection.offsetTop - 100,
+                                behavior: 'smooth'
+                            });
+                        }
+                    }, 50);
+                }
+
+                // Update active state immediately
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
 
                 // Close mobile menu if open
                 const navbarCollapse = document.querySelector('.navbar-collapse');
@@ -52,27 +98,38 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========================================
     // ACTIVE NAVIGATION HIGHLIGHTING
     // ========================================
-    window.addEventListener('scroll', function() {
+    function updateActiveNav() {
         let current = '';
         const sections = document.querySelectorAll('section[id]');
-        const navbarHeight = navbar.offsetHeight;
+        const scrollPosition = window.pageYOffset + 200; // Add offset for better detection
         
         sections.forEach(section => {
-            const sectionTop = section.offsetTop - navbarHeight - 100;
+            const sectionTop = section.offsetTop;
             const sectionHeight = section.clientHeight;
             
-            if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
                 current = section.getAttribute('id');
             }
         });
         
+        // Special handling for bottom of page (contact section)
+        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 100) {
+            const lastSection = sections[sections.length - 1];
+            current = lastSection.getAttribute('id');
+        }
+        
         navLinks.forEach(link => {
             link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
+            const href = link.getAttribute('href');
+            if (href === `#${current}`) {
                 link.classList.add('active');
             }
         });
-    });
+    }
+
+    window.addEventListener('scroll', updateActiveNav);
+    // Initial call
+    updateActiveNav();
 
     // ========================================
     // SCROLL REVEAL ANIMATION
