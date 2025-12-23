@@ -514,7 +514,7 @@ footer {
     }
 
     section {
-        min-height: auto;
+        min-height: 100vh; /* Keep full screen height on mobile */
         padding: 80px 0;
     }
 
@@ -561,6 +561,10 @@ footer {
 
     .nav-link {
         margin: 5px 0;
+    }
+
+    section {
+        min-height: 100vh; /* Keep full screen height on tablets */
     }
 }
 
