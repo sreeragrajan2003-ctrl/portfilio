@@ -73,14 +73,14 @@ class Resume(db.Model):
 
 def seed_admin():
     from app import db
-    from models import Admin
+    from models import AdminUser
 
     # check if admin already exists
-    existing_admin = Admin.query.filter_by(username="Sreerag").first()
+    existing_admin = AdminUser.query.filter_by(username="Sreerag").first()
     if existing_admin:
         return
 
-    admin = Admin(
+    admin = AdminUser(
         username="Sreerag",
         password=generate_password_hash("Radhika@123")
     )
