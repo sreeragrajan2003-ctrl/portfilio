@@ -38,7 +38,7 @@ def seed_admin():
 
 with app.app_context():
     db.create_all()
-    from models import seed_admin
+
     seed_admin()
 
 
