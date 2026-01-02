@@ -68,3 +68,24 @@ class Resume(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     filename = db.Column(db.String(255), nullable=False)
+
+
+
+def seed_admin():
+    from app import db
+    from models import Admin
+
+    # check if admin already exists
+    existing_admin = Admin.query.filter_by(username="admin").first()
+    if existing_admin:
+        return
+
+    admin = Admin(
+        username="Sreerag",
+        password=generate_password_hash("Radhika@123")
+    )
+
+    db.session.add(admin)
+    db.session.commit()
+
+    print("Seeded default admin")
