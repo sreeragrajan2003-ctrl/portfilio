@@ -82,7 +82,7 @@ def seed_admin():
 
     admin = AdminUser(
         username="Sreerag",
-        password=generate_password_hash("Radhika@123")
+        password_hash=generate_password_hash("Radhika@123")
     )
 
     db.session.add(admin)
