@@ -76,7 +76,7 @@ def seed_admin():
     from models import Admin
 
     # check if admin already exists
-    existing_admin = Admin.query.filter_by(username="admin").first()
+    existing_admin = Admin.query.filter_by(username="Sreerag").first()
     if existing_admin:
         return
 
