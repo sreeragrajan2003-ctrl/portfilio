@@ -376,13 +376,39 @@ section:nth-child(even) {
     color: white !important;
 }
 
+/* FIXED: Remove white box from floating labels */
+.form-floating {
+    position: relative;
+}
+
 .form-floating label {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.6) !important;
+    background: transparent !important;
+    padding: 0 0.25rem !important;
+}
+
+.form-floating > .form-control {
+    padding-top: 1.625rem;
+    padding-bottom: 0.625rem;
 }
 
 .form-floating > .form-control:focus ~ label,
-.form-floating > .form-control:not(:placeholder-shown) ~ label {
-    color: var(--accent);
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+    opacity: 1;
+    transform: scale(0.85) translateY(-0.15rem) translateX(0.15rem);
+    color: white !important;
+    background: transparent !important;
+    padding: 0 0.25rem !important;
+}
+
+.form-floating > .form-control:focus ~ label {
+    color: var(--accent) !important;
+}
+
+/* Remove any background from Bootstrap's floating label */
+.form-floating > label::after {
+    background-color: transparent !important;
 }
 
 /* Social Links */
